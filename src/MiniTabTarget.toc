@@ -4,7 +4,7 @@
 ## Author: Verz
 ## Version: 1.0.0
 ## SavedVariables: MiniTabTargetDB
-## IconTexture: Interface\AddOns\MiniTabTarget\icon.blp
+## IconTexture: Interface\AddOns\MiniTabTarget\Icon.blp
 ## X-Curse-Project-ID: 1418962
 
 MiniTabTarget.lua
