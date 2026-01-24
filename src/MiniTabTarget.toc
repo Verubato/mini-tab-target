@@ -7,4 +7,5 @@
 ## IconTexture: Interface\AddOns\MiniTabTarget\Icon.blp
 ## X-Curse-Project-ID: 1418962
 
+MiniFramework.lua
 MiniTabTarget.lua

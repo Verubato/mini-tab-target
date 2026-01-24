@@ -1,25 +1,14 @@
-local addonName = ...
+local _, addon = ...
+local frame = CreateFrame("Frame")
+---@type MiniFramework
+local mini = addon.Framework
+---@type Db
 local db
+---@class Db
 local dbDefaults = {
 	TargetKey = "TAB",
 	TargetPreviousKey = "SHIFT-TAB",
 }
-
-local function CopyTable(src, dst)
-	if type(dst) ~= "table" then
-		dst = {}
-	end
-
-	for k, v in pairs(src) do
-		if type(v) == "table" then
-			dst[k] = CopyTable(v, dst[k])
-		elseif dst[k] == nil then
-			dst[k] = v
-		end
-	end
-
-	return dst
-end
 
 local function UpdateBindings()
 	if InCombatLockdown() then
@@ -47,20 +36,13 @@ local function OnEvent()
 end
 
 local function Init()
-	MiniTabTargetDB = MiniTabTargetDB or {}
-	db = CopyTable(dbDefaults, MiniTabTargetDB)
+	db = mini:GetSavedVars(dbDefaults)
 
 	UpdateBindings()
 end
 
-local frame = CreateFrame("Frame")
-frame:SetScript("OnEvent", function(_, event, arg1)
-	if event == "ADDON_LOADED" and arg1 == addonName then
-		Init()
+mini:WaitForAddonLoad(Init)
 
-		frame:UnregisterEvent("ADDON_LOADED")
-		frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-		frame:SetScript("OnEvent", OnEvent)
-	end
-end)
-frame:RegisterEvent("ADDON_LOADED")
+frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+frame:SetScript("OnEvent", OnEvent)
