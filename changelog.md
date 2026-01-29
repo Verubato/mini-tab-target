@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+Fixed init error requiring the LibUIDropDownMenu library.
+
 ## 1.2.0
 
 Fixed bindings not updating on reload.
