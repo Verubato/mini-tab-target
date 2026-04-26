@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+
+Added auto detection of your target enemy keys, plus a basic addon info screen.
+
 ## 1.2.1
 
 Fixed init error requiring the LibUIDropDownMenu library.
