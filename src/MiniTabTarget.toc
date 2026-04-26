@@ -8,4 +8,5 @@
 ## X-Curse-Project-ID: 1418962
 
 MiniFramework.lua
+MiniTabTargetConfig.lua
 MiniTabTarget.lua
