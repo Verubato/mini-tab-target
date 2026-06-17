@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1
+
+12.0.7 TOC bump.
+
 ## 1.3.0
 
 Added auto detection of your target enemy keys, plus a basic addon info screen.
