@@ -5,7 +5,6 @@ local mini = addon.Framework
 local function BuildPanel(panel)
 	local header = mini:PanelHeader({
 		Parent = panel,
-		Y = -16,
 	})
 
 	local divider = mini:Divider({
