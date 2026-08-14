@@ -1,7 +1,7 @@
 # MiniTabTarget - bot reference
 
-Version 1.4.3. Interface versions: 120100, 120007, 50504, 40402, 38002,
-38000, 30405, 30300, 20506, 11509 (retail plus the classic client lines).
+Version 1.4.4. Interface versions: 120100, 50504, 40402, 38002, 38000,
+30405, 30300, 20506, 11509 (retail plus the classic client lines).
 Saved variables: MiniTabTargetDB (account-wide).
 
 ## What it does
