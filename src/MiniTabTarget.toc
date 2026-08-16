@@ -1,6 +1,7 @@
 ## Interface: 120100, 50504, 40402, 38002, 38000, 30405, 30300, 20506, 11509
 ## Title: MiniTabTarget
 ## Notes: Swaps your tab key to target nearest player in pvp contexts.
+## Category: Mini
 ## Author: Verz
 ## Version: 1.4.4
 ## SavedVariables: MiniTabTargetDB
