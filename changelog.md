@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.0
+
+You can now specify which instance type the addon applies to.
+
 ## 1.4.6
 
 Reduced the work the shared framework code does on paths the addons use heavily.
