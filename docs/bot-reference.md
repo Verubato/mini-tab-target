@@ -8,12 +8,17 @@ Saved variables: MiniTabTargetDB (account-wide).
 
 Automatically swaps what your tab-target keys do based on where you are:
 
-- In battlegrounds and arenas: keys bind to Target Nearest Enemy Player and
-  Target Previous Enemy Player (players only, ignores pets and NPCs).
-- Everywhere else: keys bind to Target Nearest Enemy and Target Previous
-  Enemy.
+- In a battleground or arena bracket that is enabled in the settings panel:
+  keys bind to Target Nearest Enemy Player and Target Previous Enemy
+  Player (players only, ignores pets and NPCs).
+- Everywhere else, and in a bracket that is turned off: keys bind to
+  Target Nearest Enemy and Target Previous Enemy.
 
-Bindings are re-applied on every zone change and on login/reload.
+Bindings are re-applied on every zone change, on UPDATE_BATTLEFIELD_STATUS
+(the match type can settle just after the zone change), and on
+login/reload. A change made in the settings panel applies immediately out
+of combat, and waits for combat to end otherwise, same as every other
+binding change.
 
 ## Which keys it uses
 
@@ -29,29 +34,51 @@ Bindings are re-applied on every zone change and on login/reload.
 
 ## Settings panel
 
-The panel (Options -> AddOns -> MiniTabTarget) is informational only: it
-describes how the addon works and has no controls.
+The panel (Options -> AddOns -> MiniTabTarget) has four checkboxes under
+"Where it applies", one per PvP bracket, all on by default:
+
+- Arena: rated arena and skirmish.
+- Solo Shuffle: the three rounds of a solo shuffle match.
+- Battleground: unrated battlegrounds, epic battlegrounds, and brawls.
+- Rated Battleground: rated battlegrounds and Battleground Blitz.
+
+Turning a bracket off makes tab behave there the way it does outside any
+PvP instance; it does not stop the addon from touching your bindings.
+
+## Saved variables
+
+- TargetKey, TargetPreviousKey: the keys the addon rebinds. See "Which
+  keys it uses" above.
+- Arena, SoloShuffle, Battleground, RatedBattleground: one boolean per
+  bracket, all true by default. See "Settings panel" above for what each
+  one covers.
 
 ## Slash commands
 
-/mtt, /minitt, /minitabtarget - all open the info panel.
+/mtt, /minitt, /minitabtarget - all open the settings panel.
 
 ## Version-gated / conditional behaviour
 
-- Binding changes are skipped while in combat lockdown; they apply on the
-  next zone change or world load out of combat.
+- Binding changes made in combat lockdown wait for combat to end, then
+  apply immediately; they no longer need a zone change or world load.
 - "PvP mode" means instance type "pvp" (battleground) or "arena". World PvP,
   war mode, and duels count as PvE for this addon; tab still targets any
   enemy there.
+- The bracket split comes from C_PvP, which the classic clients are
+  missing or thin on: solo shuffle falls under Arena and rated
+  battlegrounds fall under Battleground there. Any client without
+  C_PvP.IsRatedBattleground treats rated battlegrounds as ordinary ones,
+  so they follow the Battleground toggle instead.
 
 ## Troubleshooting
 
-- "Tab still targets pets in a battleground": make sure you actually zoned
+- "Tab still targets pets in a battleground": first check that bracket's
+  toggle is on in the settings panel. Also make sure you actually zoned
   in (bindings apply on zone change), and that you were not in combat when
-  entering; they will re-apply after combat on the next zone event. Also
-  verify the addon is using the right key: if you rebound tab-targeting to
-  another key, the addon should auto-detect it, but a stale manual override
-  in MiniTabTargetDB will win. Reset by setting the values back to "TAB" and
+  entering; they will re-apply as soon as combat ends. Also verify the
+  addon is using the right key: if you rebound tab-targeting to another
+  key, the addon should auto-detect it, but a stale manual override in
+  MiniTabTargetDB will win. Reset by setting the values back to "TAB" and
   "SHIFT-TAB" or deleting the saved variables.
 - "It changed my keybindings": that is its purpose; it rebinds the two
   target-enemy keys per zone type. Remove the addon and rebind your keys in

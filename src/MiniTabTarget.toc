@@ -9,5 +9,5 @@
 ## X-Curse-Project-ID: 1418962
 
 Libs\MiniFramework\MiniFramework.xml
-MiniTabTargetConfig.lua
 MiniTabTarget.lua
+MiniTabTargetConfig.lua

@@ -17,15 +17,78 @@ local function BuildPanel(panel)
 	local desc = mini:TextBlock({
 		Parent = panel,
 		Lines = {
-			"Automatically swaps your target and previous-target keys based on your current zone.",
+			"Automatically swaps your target and previous-target keys based on your current zone and PvP bracket.",
 			" ",
-			"In battlegrounds and arenas, your keys target the nearest enemy player.",
-			"Everywhere else, your keys target the nearest enemy.",
+			"In a bracket enabled below, your keys target the nearest enemy player.",
+			"Everywhere else, and in a bracket turned off, your keys target the nearest enemy.",
 			" ",
 			"Your keys are auto-detected from your keybindings unless you have overridden them in the saved variables.",
 		},
 	})
 	desc:SetPoint("TOPLEFT", divider, "BOTTOMLEFT", 0, -mini.VerticalSpacing)
+
+	local bracketsDivider = mini:Divider({
+		Parent = panel,
+		Text = "Where it applies",
+	})
+	bracketsDivider:SetPoint("TOPLEFT", desc, "BOTTOMLEFT", 0, -mini.VerticalSpacing)
+	bracketsDivider:SetWidth(mini.TextMaxWidth)
+
+	local arena = mini:Checkbox({
+		Parent = panel,
+		LabelText = "Arena",
+		Tooltip = "Rated arena and skirmish.",
+		GetValue = function()
+			return addon.Db.Arena
+		end,
+		SetValue = function(value)
+			addon.Db.Arena = value
+			addon.UpdateBindings()
+		end,
+	})
+	arena:SetPoint("TOPLEFT", bracketsDivider, "BOTTOMLEFT", 0, -mini.VerticalSpacing)
+
+	local soloShuffle = mini:Checkbox({
+		Parent = panel,
+		LabelText = "Solo Shuffle",
+		Tooltip = "The three rounds of a solo shuffle match.",
+		GetValue = function()
+			return addon.Db.SoloShuffle
+		end,
+		SetValue = function(value)
+			addon.Db.SoloShuffle = value
+			addon.UpdateBindings()
+		end,
+	})
+	soloShuffle:SetPoint("TOPLEFT", arena, "BOTTOMLEFT", 0, -mini.VerticalSpacing)
+
+	local battleground = mini:Checkbox({
+		Parent = panel,
+		LabelText = "Battleground",
+		Tooltip = "Unrated battlegrounds, epic battlegrounds, and brawls.",
+		GetValue = function()
+			return addon.Db.Battleground
+		end,
+		SetValue = function(value)
+			addon.Db.Battleground = value
+			addon.UpdateBindings()
+		end,
+	})
+	battleground:SetPoint("TOPLEFT", soloShuffle, "BOTTOMLEFT", 0, -mini.VerticalSpacing)
+
+	local ratedBattleground = mini:Checkbox({
+		Parent = panel,
+		LabelText = "Rated Battleground",
+		Tooltip = "Rated battlegrounds and Battleground Blitz.",
+		GetValue = function()
+			return addon.Db.RatedBattleground
+		end,
+		SetValue = function(value)
+			addon.Db.RatedBattleground = value
+			addon.UpdateBindings()
+		end,
+	})
+	ratedBattleground:SetPoint("TOPLEFT", battleground, "BOTTOMLEFT", 0, -mini.VerticalSpacing)
 end
 
 local function Init()
