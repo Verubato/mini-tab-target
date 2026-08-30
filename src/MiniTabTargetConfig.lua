@@ -5,6 +5,7 @@ local mini = addon.Framework
 local function BuildPanel(panel)
 	local header = mini:PanelHeader({
 		Parent = panel,
+		Description = "Tab targeting that makes sense.",
 	})
 
 	local divider = mini:Divider({
