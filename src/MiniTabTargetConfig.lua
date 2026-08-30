@@ -92,6 +92,9 @@ local function BuildPanel(panel)
 end
 
 local function Init()
+	-- A styled button clashes with the stock Blizzard art around it in the settings screen.
+	mini:SetCustomStyling(true, { Button = false })
+
 	local panel = CreateFrame("Frame")
 	panel.name = "MiniTabTarget"
 
