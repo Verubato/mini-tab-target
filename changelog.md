@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.1
+
+- UI improvements.
+- Merged the Rated Battleground toggle into Battleground.
+
 ## 1.5.0
 
 You can now specify which instance type the addon applies to.
