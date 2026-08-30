@@ -52,7 +52,7 @@ local function BuildPanel(panel)
 	local soloShuffle = mini:Checkbox({
 		Parent = panel,
 		LabelText = "Solo Shuffle",
-		Tooltip = "The three rounds of a solo shuffle match.",
+		Tooltip = "Rated solo shuffle.",
 		GetValue = function()
 			return addon.Db.SoloShuffle
 		end,
@@ -66,7 +66,7 @@ local function BuildPanel(panel)
 	local battleground = mini:Checkbox({
 		Parent = panel,
 		LabelText = "Battleground",
-		Tooltip = "Unrated battlegrounds, epic battlegrounds, and brawls.",
+		Tooltip = "Rated/unrated/epic battlegrounds and Blitz.",
 		GetValue = function()
 			return addon.Db.Battleground
 		end,
@@ -76,20 +76,6 @@ local function BuildPanel(panel)
 		end,
 	})
 	battleground:SetPoint("TOPLEFT", soloShuffle, "BOTTOMLEFT", 0, -mini.VerticalSpacing)
-
-	local ratedBattleground = mini:Checkbox({
-		Parent = panel,
-		LabelText = "Rated Battleground",
-		Tooltip = "Rated battlegrounds and Battleground Blitz.",
-		GetValue = function()
-			return addon.Db.RatedBattleground
-		end,
-		SetValue = function(value)
-			addon.Db.RatedBattleground = value
-			addon.UpdateBindings()
-		end,
-	})
-	ratedBattleground:SetPoint("TOPLEFT", battleground, "BOTTOMLEFT", 0, -mini.VerticalSpacing)
 end
 
 local function Init()

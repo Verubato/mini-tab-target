@@ -89,24 +89,8 @@ fw.describe("MiniTabTarget - bindings", function()
 		AssertKeys("TARGETNEARESTENEMYPLAYER", "TARGETPREVIOUSENEMYPLAYER")
 	end)
 
-	fw.it("falls back to the normal keys in a rated battleground when RatedBattleground is disabled", function()
-		LoginWith({ Battleground = true, RatedBattleground = false })
-
-		_G.C_PvP.IsRatedBattleground = function()
-			return true
-		end
-
-		SetZone("pvp")
-
-		AssertKeys("TARGETNEARESTENEMY", "TARGETPREVIOUSENEMY")
-	end)
-
-	fw.it("follows RatedBattleground for a Blitz match", function()
-		LoginWith({ Battleground = true, RatedBattleground = false })
-
-		_G.C_PvP.IsSoloRBG = function()
-			return true
-		end
+	fw.it("falls back to the normal keys in a battleground when Battleground is disabled", function()
+		LoginWith({ Battleground = false })
 
 		SetZone("pvp")
 
@@ -152,6 +136,47 @@ fw.describe("MiniTabTarget - bindings", function()
 		WowMock.FireEvent("UPDATE_BATTLEFIELD_STATUS")
 
 		AssertKeys("TARGETNEARESTENEMY", "TARGETPREVIOUSENEMY")
+	end)
+
+	fw.it("folds a rated battleground left on into the merged Battleground toggle", function()
+		local context = LoginWith({ Battleground = true, RatedBattleground = true })
+
+		fw.eq(context.Addon.Db.Battleground, true, "battleground stays on")
+		fw.eq(context.Addon.Db.RatedBattleground, nil, "the retired key is gone")
+	end)
+
+	fw.it("folds a rated battleground left off without disturbing an unrated toggle left on", function()
+		local context = LoginWith({ Battleground = true, RatedBattleground = false })
+
+		fw.eq(context.Addon.Db.Battleground, true, "battleground stays on")
+		fw.eq(context.Addon.Db.RatedBattleground, nil, "the retired key is gone")
+	end)
+
+	fw.it("flips Battleground on when only the rated toggle was on", function()
+		local context = LoginWith({ Battleground = false, RatedBattleground = true })
+
+		fw.eq(context.Addon.Db.Battleground, true, "the on rated toggle wins the fold")
+		fw.eq(context.Addon.Db.RatedBattleground, nil, "the retired key is gone")
+	end)
+
+	fw.it("leaves Battleground off when both old toggles were off", function()
+		local context = LoginWith({ Battleground = false, RatedBattleground = false })
+
+		fw.eq(context.Addon.Db.Battleground, false, "both toggles off stays off")
+		fw.eq(context.Addon.Db.RatedBattleground, nil, "the retired key is gone")
+	end)
+
+	fw.it("does not repeat the fold on a later login, so turning Battleground off afterward sticks", function()
+		local context = LoginWith({ Battleground = false, RatedBattleground = true })
+		fw.eq(context.Addon.Db.Battleground, true, "the first login folds the rated toggle in")
+
+		context.Addon.Db.Battleground = false
+
+		-- Reinstalling without touching MiniTabTargetDB models a /reload.
+		context = harness.Load("MiniTabTarget")
+		harness.Login(context)
+
+		fw.eq(context.Addon.Db.Battleground, false, "the player's later off choice is not reverted")
 	end)
 
 	_G.C_PvP = originalCPvP

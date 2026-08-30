@@ -34,13 +34,12 @@ binding change.
 
 ## Settings panel
 
-The panel (Options -> AddOns -> MiniTabTarget) has four checkboxes under
+The panel (Options -> AddOns -> MiniTabTarget) has three checkboxes under
 "Where it applies", one per PvP bracket, all on by default:
 
 - Arena: rated arena and skirmish.
-- Solo Shuffle: the three rounds of a solo shuffle match.
-- Battleground: unrated battlegrounds, epic battlegrounds, and brawls.
-- Rated Battleground: rated battlegrounds and Battleground Blitz.
+- Solo Shuffle: rated solo shuffle.
+- Battleground: rated/unrated/epic battlegrounds, brawls, and Blitz.
 
 Turning a bracket off makes tab behave there the way it does outside any
 PvP instance; it does not stop the addon from touching your bindings.
@@ -49,9 +48,11 @@ PvP instance; it does not stop the addon from touching your bindings.
 
 - TargetKey, TargetPreviousKey: the keys the addon rebinds. See "Which
   keys it uses" above.
-- Arena, SoloShuffle, Battleground, RatedBattleground: one boolean per
-  bracket, all true by default. See "Settings panel" above for what each
-  one covers.
+- Arena, SoloShuffle, Battleground: one boolean per bracket, all true by
+  default. See "Settings panel" above for what each one covers.
+- RatedBattleground: retired. A saved variables table still carrying it is
+  folded into Battleground once at load, on if either was on, and the key
+  is then removed.
 
 ## Slash commands
 
@@ -65,10 +66,8 @@ PvP instance; it does not stop the addon from touching your bindings.
   war mode, and duels count as PvE for this addon; tab still targets any
   enemy there.
 - The bracket split comes from C_PvP, which the classic clients are
-  missing or thin on: solo shuffle falls under Arena and rated
-  battlegrounds fall under Battleground there. Any client without
-  C_PvP.IsRatedBattleground treats rated battlegrounds as ordinary ones,
-  so they follow the Battleground toggle instead.
+  missing or thin on, so solo shuffle falls under Arena there. Every
+  battleground follows the one Battleground toggle on every client.
 
 ## Troubleshooting
 

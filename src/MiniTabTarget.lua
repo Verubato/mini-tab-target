@@ -11,11 +11,10 @@ local dbDefaults = {
 	Arena = true,
 	SoloShuffle = true,
 	Battleground = true,
-	RatedBattleground = true,
 }
 
----Which of the four bracket flags the current zone falls under, or nil outside a PvP instance.
----Classic has no C_PvP, and older retail builds have no IsSoloRBG, so each call is guarded.
+---Which of the three bracket flags the current zone falls under, or nil outside a PvP instance.
+---Classic has no C_PvP at all, and some clients carry it without IsSoloShuffle.
 local function Bracket()
 	local _, instanceType = IsInInstance()
 
@@ -28,17 +27,26 @@ local function Bracket()
 	end
 
 	if instanceType == "pvp" then
-		local isRated = C_PvP
-			and ((C_PvP.IsRatedBattleground and C_PvP.IsRatedBattleground()) or (C_PvP.IsSoloRBG and C_PvP.IsSoloRBG()))
-
-		if isRated then
-			return "RatedBattleground"
-		end
-
 		return "Battleground"
 	end
 
 	return nil
+end
+
+---A saved RatedBattleground key marks a save from before the merge, so the fold runs once.
+---Folds toward on, so a player who had only one of the two toggles on keeps that bracket.
+local function MigrateRatedBattleground()
+	local vars = _G.MiniTabTargetDB
+
+	if not vars or vars.RatedBattleground == nil then
+		return
+	end
+
+	if vars.RatedBattleground then
+		vars.Battleground = true
+	end
+
+	vars.RatedBattleground = nil
 end
 
 ---SetBinding is protected, so this only runs out of combat.
@@ -77,6 +85,8 @@ local function OnEvent()
 end
 
 local function Init()
+	MigrateRatedBattleground()
+
 	db = mini:GetSavedVars(dbDefaults)
 	addon.Db = db
 	addon.UpdateBindings = UpdateBindings
