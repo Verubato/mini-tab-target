@@ -2,6 +2,8 @@ local _, addon = ...
 ---@type MiniFramework
 local mini = addon.Framework
 
+local BRACKET_COLUMNS = 3
+
 local function BuildPanel(panel)
 	local header = mini:PanelHeader({
 		Parent = panel,
@@ -35,6 +37,8 @@ local function BuildPanel(panel)
 	bracketsDivider:SetPoint("TOPLEFT", desc, "BOTTOMLEFT", 0, -mini.VerticalSpacing)
 	bracketsDivider:SetWidth(mini.TextMaxWidth)
 
+	local columnStep = mini:ColumnWidth(BRACKET_COLUMNS, 0, 0)
+
 	local arena = mini:Checkbox({
 		Parent = panel,
 		LabelText = "Arena",
@@ -61,7 +65,7 @@ local function BuildPanel(panel)
 			addon.UpdateBindings()
 		end,
 	})
-	soloShuffle:SetPoint("TOPLEFT", arena, "BOTTOMLEFT", 0, -mini.VerticalSpacing)
+	soloShuffle:SetPoint("LEFT", arena, "LEFT", columnStep, 0)
 
 	local battleground = mini:Checkbox({
 		Parent = panel,
@@ -75,7 +79,7 @@ local function BuildPanel(panel)
 			addon.UpdateBindings()
 		end,
 	})
-	battleground:SetPoint("TOPLEFT", soloShuffle, "BOTTOMLEFT", 0, -mini.VerticalSpacing)
+	battleground:SetPoint("LEFT", soloShuffle, "LEFT", columnStep, 0)
 end
 
 local function Init()

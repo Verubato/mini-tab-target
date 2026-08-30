@@ -60,6 +60,26 @@ local function TooltipOn(frame)
 	return title, body
 end
 
+---A control that shares a row carries one point, so its own row centre is the only thing
+---placing it.
+---@param frame table
+---@param leftOf table
+---@param what string
+---@return number the horizontal step between the two
+local function AssertSameRow(frame, leftOf, what)
+	fw.eq(frame:GetNumPoints(), 1, what .. " is placed by one point")
+
+	local point, relativeTo, relativePoint, x, y = frame:GetPoint(1)
+
+	fw.eq(point, "LEFT", what .. " is anchored by its own left edge")
+	fw.eq(relativeTo, leftOf, what .. " hangs off the toggle to its left")
+	fw.eq(relativePoint, "LEFT", what .. " measures from that toggle's left edge")
+	fw.eq(y, 0, what .. " sits on the same row, not below")
+	fw.truthy(x > 0, what .. " steps right into the next column")
+
+	return x
+end
+
 smoke.Run("MiniTabTarget", {
 	extra = function(context)
 		fw.eq(context.Addon.Framework.CustomStyling, true, "custom styling on")
@@ -81,5 +101,13 @@ smoke.Run("MiniTabTarget", {
 		local bgTitle, bgBody = TooltipOn(battleground)
 		fw.eq(bgTitle, "Battleground", "the battleground tooltip is titled with the label")
 		fw.eq(bgBody, "Rated/unrated/epic battlegrounds and Blitz.", "the battleground tooltip wording")
+
+		local arena = FindCheckbox("Arena")
+		fw.not_nil(arena, "the arena checkbox")
+
+		local soloStep = AssertSameRow(soloShuffle, arena, "the solo shuffle toggle")
+		local bgStep = AssertSameRow(battleground, soloShuffle, "the battleground toggle")
+
+		fw.eq(bgStep, soloStep, "all three toggles sit on one evenly spaced row")
 	end,
 })
